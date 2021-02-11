@@ -130,6 +130,12 @@ class change_balance(StatesGroup):
 
 class deletefrom_user(StatesGroup):
     user_id = State()
+    
+    
+class get_money(StatesGroup):
+    money = State()
+    payment_choice = State()
+    payment_info = State()
 
 
 
@@ -382,6 +388,40 @@ async def change_currency_func(message: types.Message):
     await bot.send_message(message.chat.id, '🔙 Выберите валюту', reply_markup=currenct_keyboard)
 
 
+@dp.message_handler(text='Вывести💸', state="*")
+async def get_money_func(message: types.Message):
+    await bot.send_message(message.chat.id, 'Введите сумму вывода.')
+    await get_money.money.set()
+
+@dp.message_handler(state=get_money.money, content_types=types.ContentTypes.TEXT)
+async def get_amount_money(message: types.Message, state: FSMContext):
+    await state.update_data(money=message.text)
+    await bot.send_message(message.chat.id, 'Способы вывода\n1.Карта\n2.qiwi')
+    await get_money.payment_choice.set()
+
+@dp.message_handler(state=get_money.payment_choice, content_types=types.ContentTypes.TEXT)
+async def get_payment_choice(message: types.Message, state: FSMContext):
+    await state.update_data(payment_choice=message.text)
+    await bot.send_message(message.chat.id, 'Введите реквезиты')
+    await get_money.payment_info.set()
+    
+
+@dp.message_handler(state=get_money.payment_info, content_types=types.ContentTypes.TEXT)
+async def get_payment_choice(message: types.Message, state: FSMContext):
+    await state.update_data(payment_choice=message.text)
+    payment = await state.get_data()
+    if payment['payment_choice'] != '':
+        balance = get_balance(message.chat.id)
+        money = payment['money']
+        if int(money) <= int(balance):
+            await bot.send_message(message.chat.id, f'Вывод на сумму {money} оформлен👌', reply_markup=main_keyboard)
+            pick_money(message.chat.id, money)
+            await state.finish()
+        elif int(money) > int(balance):
+            await bot.send_message(message.chat.id, f'У вас не хватает денег⚠️', reply_markup=main_keyboard)
+            await state.finish()    
+    
+    
 
 @dp.message_handler(text='RUB🇷🇺')
 async def chance_curencyru(message: types.Message):
