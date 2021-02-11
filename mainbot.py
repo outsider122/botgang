@@ -20,7 +20,7 @@ token = 'aa83a01cd8b3d5c0bfebcc48dc161b0b'
 
 phone = '+380974845941' 
 
-help_message = '''Техническая поддержка:\n @favorit_betting'''
+help_message = '''Техническая поддержка:\n@favorit_betting'''
 
 admins = [1546170311,1464117623]
 
