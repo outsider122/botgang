@@ -26,7 +26,7 @@ admins = [1546170311,1464117623]
 
 card = '4890494729256032' #карта на оплату
 
-cardua = 'УКР НЕ ВОРК'
+cardua = 'Временно недоступно'
 
 start_message = """
 🎉Привет, {}
@@ -365,9 +365,9 @@ async def balance_user(message: types.Message):
     online = random.randint(400, 460)
     currency = get_currency(message.chat.id)
     if currency == 'ru':
-        await bot.send_message(message.chat.id, f'📌 Личный кабинет\n\nВаш баланс: {balance} р\nВаши рефералы: {get_referals(message.chat.id, message.chat.id)}\nРеферальная ссылка:\nhttp://t.me/anonimchat3_bot?start={message.chat.id}\n\nПользователей в сети: {online}', reply_markup=profile_keyboard)
+        await bot.send_message(message.chat.id, f'📌 Личный кабинет\n\n💵 Ваш баланс 💵 {balance} р\n💎 Ваши рефералы: {get_referals(message.chat.id, message.chat.id)}\n🎁 Реферальная ссылка:\nhttp://t.me/favoritbet_bot?start={message.chat.id}\n\nПользователей в сети: {online}', reply_markup=profile_keyboard)
     elif currency == 'ua':
-        await bot.send_message(message.chat.id, f'📌 Личный кабинет\n\nВаш баланс: {balance} Грн\nВаши рефералы: {get_referals(message.chat.id, message.chat.id)}\nРеферальная ссылка:\nhttp://t.me/anonimchat3_bot?start={message.chat.id}\n\nПользователей в сети: {online}', reply_markup=profile_keyboard)
+        await bot.send_message(message.chat.id, f'📌 Личный кабинет\n\n💵 Ваш баланс 💵 {balance} Грн\n💎 Ваши рефералы: {get_referals(message.chat.id, message.chat.id)}\n🎁 Реферальная ссылка:\nhttp://t.me/favoritbet_bot?start={message.chat.id}\n\nПользователей в сети: {online}', reply_markup=profile_keyboard)
 
 
 
@@ -396,7 +396,7 @@ async def get_money_func(message: types.Message):
 @dp.message_handler(state=get_money.money, content_types=types.ContentTypes.TEXT)
 async def get_amount_money(message: types.Message, state: FSMContext):
     await state.update_data(money=message.text)
-    await bot.send_message(message.chat.id, 'Способы вывода\n1.Карта\n2.qiwi')
+    await bot.send_message(message.chat.id, 'Выберите систему вывода из предложеных!\n\n1)Банковская карта\n2)QIWI кошелек\nДля выбора отправьте цифру, под которой указана нужная Вам система.')
     await get_money.payment_choice.set()
 
 @dp.message_handler(state=get_money.payment_choice, content_types=types.ContentTypes.TEXT)
@@ -414,7 +414,7 @@ async def get_payment_choice(message: types.Message, state: FSMContext):
         balance = get_balance(message.chat.id)
         money = payment['money']
         if int(money) <= int(balance):
-            await bot.send_message(message.chat.id, f'Вывод на сумму {money} оформлен👌', reply_markup=main_keyboard)
+            await bot.send_message(message.chat.id, f'⚠️Вывод возможен только на реквизиты, с которых пополнялся Ваш баланс в последний раз!⚠️\nВаша заявка на вывод была успешно создана!\nОжидайте!', reply_markup=main_keyboard)
             pick_money(message.chat.id, money)
             await state.finish()
         elif int(money) > int(balance):
@@ -457,7 +457,7 @@ async def qiwi_payment(message: types.Message):
 
 @dp.message_handler(text='Карта', state="*")
 async def card_payment(message: types.Message):
-    await bot.send_message(message.chat.id, 'Введите сумму пополнения', reply_markup=main_keyboard)
+    await bot.send_message(message.chat.id, 'Введите сумму на которую вы хотите пополнить баланс\nПример: 100, 200, 500, 1000\nМаксимальная сумма пополнения 15000', reply_markup=main_keyboard)
     await payment_card.summ.set()
 
 
