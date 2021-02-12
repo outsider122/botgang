@@ -397,14 +397,8 @@ async def get_money_func(message: types.Message):
 async def get_amount_money(message: types.Message, state: FSMContext):
     await state.update_data(money=message.text)
     await bot.send_message(message.chat.id, 'Выберите систему вывода из предложеных!\n\n1)Банковская карта\n2)QIWI кошелек\nДля выбора отправьте цифру, под которой указана нужная Вам система.')
-    await get_money.payment_choice.set()
-
-@dp.message_handler(state=get_money.payment_choice, content_types=types.ContentTypes.TEXT)
-async def get_payment_choice(message: types.Message, state: FSMContext):
-    await state.update_data(payment_choice=message.text)
-    await bot.send_message(message.chat.id, 'Введите реквезиты')
     await get_money.payment_info.set()
-    
+
 
 @dp.message_handler(state=get_money.payment_info, content_types=types.ContentTypes.TEXT)
 async def get_payment_choice(message: types.Message, state: FSMContext):
