@@ -26,7 +26,7 @@ admins = [1546170311,1464117623]
 
 card = '4890494729256032' #карта на оплату
 
-cardua = 'Временно недоступно'
+cardua = '4890494729256032'
 
 start_message = """
 🎉Привет, {}
@@ -334,7 +334,7 @@ async def start_func(message: types.Message):
         check = new_user(message.chat.id)
         if check == 'new user':
             await bot.send_message(message.chat.id, start_message.format(message.from_user.first_name), reply_markup=welcome_keyboard)
-            add_promo(telegram_id, ref_code)
+            add_promo(message.chat.id, ref_code)
         else:
             balance = get_balance(message.chat.id)
             online = random.randint(400, 460)
