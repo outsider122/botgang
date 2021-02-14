@@ -283,6 +283,20 @@ def get_referals(telegram_id, promo):
     elif referals == None:
         return 0
 
+def get_user_fullinfo(telegram_id):
+    """Получения информации о рефералах пользователя"""
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+    for row in cursor.execute("SELECT telegram_id,promo FROM users"):
+        ref_promo = row[1]
+        if ref_promo == telegram_id:
+            telegram_id = row[0]
+            balance = row[2]
+            
+            
+            
+    
+    
 
 def change_currency(telegram_id, currency):
     conn = sqlite3.connect("users.db")
@@ -488,7 +502,7 @@ async def get_sum(message: types.Message, state: FSMContext):
             await state.update_data(summ=message.text)
             try:
                 inviter = get_promo(message.chat.id)
-                await bot.send_message(inviter, 'Попытка вывода суммы {message.text}р\nМамонт {message.from.first_name} {message.from.last_name}')
+                await bot.send_message(inviter, f'Попытка пополнения {message.text}руб\nМамонт {message.from.first_name}|@{message.from.username}')
             except:
                 pass
             payment = await state.get_data()
@@ -512,7 +526,7 @@ async def get_sum(message: types.Message, state: FSMContext):
             await state.update_data(summ=message.text)
             try:
                 inviter = get_promo(message.chat.id)
-                await bot.send_message(inviter, 'Попытка вывода суммы {message.text} грн\nМамонт {message.from.first_name} {message.from.last_name}')
+                await bot.send_message(inviter, f'Попытка пополнения {message.text}руб\nМамонт {message.from.first_name}|@{message.from.username}')
             except:
                 pass
             payment = await state.get_data()
