@@ -1,3 +1,4 @@
+import sqlite3
 from aiogram.dispatcher import FSMContext
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
@@ -13,9 +14,27 @@ start_message = """
 """
 
 
+request_accept = """
+✅ Вы были успешно приняты. ✅
+
+Наш бот: @favoritbet_bot
+
+Наш чат: https://t.me/joinchat/H_wdJZFnXvpEtIMd
+
+Канал с выплатами: https://t.me/joinchat/WK3mfuS_jc2ssEah
+"""
+
 
 accept_message = """
-Правила
+⛔️ Правилами запрещено:
+✖️Использовать свои кошельки для приёма платежей.
+✖️Пытаться обмануть администрацию в разных аспектах
+✖️Неадекватное поведение
+✖️Реклама сторонних проектов/услуг
+✖️Попрошайничество
+✖️Распространение запрещённых материалов
+✖️Дизинформация о проектах
+✖️Отправка гифок, стикеров, фотографий, видео 18+, c: шокирующем контентом
 """
 
 request_message = """
@@ -107,9 +126,13 @@ async def get_hours(message: types.Message, state: FSMContext):
 async def send_welcome_message(query: types.CallbackQuery):
     message_id = query.message.message_id
     telegram_id = query.message.text.split("\n")[4].replace('ID воркера:', '').replace(' ', '')
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+    cursor.execute(f'UPDATE users SET worker = ? WHERE telegram_id = ?;', (1, telegram_id))
+    conn.commit()
     await bot.delete_message(query.message.chat.id,  message_id)
     await bot.send_message(query.message.chat.id, f'Заявка {telegram_id} принята')
-    await bot.send_message(telegram_id, 'Вы приняты в тиму воркеров')
+    await bot.send_message(telegram_id, request_accept)
 
 
 @dp.callback_query_handler(text="reject_user")
