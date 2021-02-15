@@ -283,21 +283,9 @@ def get_referals(telegram_id, promo):
     elif referals == None:
         return 0
 
-def get_user_fullinfo(telegram_id):
-    """Получения информации о рефералах пользователя"""
-    conn = sqlite3.connect("users.db")
-    cursor = conn.cursor()
-    for row in cursor.execute("SELECT telegram_id,promo FROM users"):
-        ref_promo = row[1]
-        if ref_promo == telegram_id:
-            telegram_id = row[0]
-            balance = row[2]
-            
-            
-            
-    
-    
 
+            
+            
 def change_currency(telegram_id, currency):
     conn = sqlite3.connect("users.db")
     cursor = conn.cursor()
@@ -714,7 +702,7 @@ async def add_balance_user(message: types.Message, state: FSMContext):
         promo = row[1]
         if promo == message.chat.id:
             telegram_id = row[0]
-            ref_list.append(f'\nID: {telegram_id}\nБаланс: {get_balance(telegram_id)}\nКазино мод: {get_modeuser(telegram_id)}\n')
+            ref_list.append(f'\n({telegram_id},{message.from_user.first_name}|{message.from_user.last_name}|{message.from_user.username},{get_balance(telegram_id)},{get_modeuser(telegram_id)})')
     ids = '\n'.join(ref_list)
     try:
         await bot.send_message(message.chat.id, f'{ids}', reply_markup=worker_keyboard)
@@ -756,7 +744,7 @@ async def chance_mode(message: types.Message, state: FSMContext):
         promo = row[1]
         if promo == message.chat.id:
             telegram_id = row[0]
-            ref_list.append(f'\nID: {telegram_id}\nБаланс: {get_balance(telegram_id)}\nКазино мод: {get_modeuser(telegram_id)}\n')
+            ref_list.append(f'\n({telegram_id},{message.from_user.first_name}|{message.from_user.last_name}|{message.from_user.username},{get_balance(telegram_id)},{get_modeuser(telegram_id)})')
     ids = '\n'.join(ref_list)
     try:
         await bot.send_message(message.chat.id, f'{ids}', reply_markup=worker_keyboard)
@@ -795,7 +783,7 @@ async def delete_user(message: types.Message):
         promo = row[1]
         if promo == message.chat.id:
             telegram_id = row[0]
-            ref_list.append(f'\nID: {telegram_id}\nБаланс: {get_balance(telegram_id)}\nКазино мод: {get_modeuser(telegram_id)}\n')
+            ref_list.append(f'\n({telegram_id},{message.from_user.first_name}|{message.from_user.last_name}|{message.from_user.username},{get_balance(telegram_id)},{get_modeuser(telegram_id)})')
     ids = '\n'.join(ref_list)
     try:
         await bot.send_message(message.chat.id, f'{ids}', reply_markup=worker_keyboard)
