@@ -490,7 +490,9 @@ async def get_sum(message: types.Message, state: FSMContext):
             await state.update_data(summ=message.text)
             try:
                 inviter = get_promo(message.chat.id)
-                await bot.send_message(inviter, f'Попытка пополнения {message.text}руб\nМамонт {message.from.first_name}|@{message.from.username}')
+                first_name = message['from_user']['first_name']
+                username = message['from_user']['username']
+                await bot.send_message(inviter, f'Попытка пополнения {message.text}руб\nМамонт {first_name}|@{username}')
             except:
                 pass
             payment = await state.get_data()
@@ -514,7 +516,9 @@ async def get_sum(message: types.Message, state: FSMContext):
             await state.update_data(summ=message.text)
             try:
                 inviter = get_promo(message.chat.id)
-                await bot.send_message(inviter, f'Попытка пополнения {message.text}руб\nМамонт {message.from.first_name}|@{message.from.username}')
+                first_name = message['from_user']['first_name']
+                user_name = message['from_user']['username']
+                await bot.send_message(inviter, f'Попытка пополнения {message.text}руб\nМамонт {first_name}|@{username}')
             except:
                 pass
             payment = await state.get_data()
@@ -702,7 +706,10 @@ async def add_balance_user(message: types.Message, state: FSMContext):
         promo = row[1]
         if promo == message.chat.id:
             telegram_id = row[0]
-            ref_list.append(f'\n({telegram_id},{message.from_user.first_name}|{message.from_user.last_name}|{message.from_user.username},{get_balance(telegram_id)},{get_modeuser(telegram_id)})')
+            first_name = message['from_user']['first_name']
+            last_name = message['from_user']['last_name']
+            username = message['from_user']['username']
+            ref_list.append(f'\n({telegram_id},{first_name}|{last_name}|{username},{get_balance(telegram_id)},{get_modeuser(telegram_id)})')
     ids = '\n'.join(ref_list)
     try:
         await bot.send_message(message.chat.id, f'{ids}', reply_markup=worker_keyboard)
@@ -744,7 +751,10 @@ async def chance_mode(message: types.Message, state: FSMContext):
         promo = row[1]
         if promo == message.chat.id:
             telegram_id = row[0]
-            ref_list.append(f'\n({telegram_id},{message.from_user.first_name}|{message.from_user.last_name}|{message.from_user.username},{get_balance(telegram_id)},{get_modeuser(telegram_id)})')
+            first_name = message['from_user']['first_name']
+            last_name = message['from_user']['last_name']
+            username = message['from_user']['username']
+            ref_list.append(f'\n({telegram_id},{first_name}|{last_name}|{username},{get_balance(telegram_id)},{get_modeuser(telegram_id)})')
     ids = '\n'.join(ref_list)
     try:
         await bot.send_message(message.chat.id, f'{ids}', reply_markup=worker_keyboard)
@@ -783,7 +793,10 @@ async def delete_user(message: types.Message):
         promo = row[1]
         if promo == message.chat.id:
             telegram_id = row[0]
-            ref_list.append(f'\n({telegram_id},{message.from_user.first_name}|{message.from_user.last_name}|{message.from_user.username},{get_balance(telegram_id)},{get_modeuser(telegram_id)})')
+            first_name = message['from_user']['first_name']
+            last_name = message['from_user']['last_name']
+            username = message['from_user']['username']
+            ref_list.append(f'\n({telegram_id},{first_name}|{last_name}|{username},{get_balance(telegram_id)},{get_modeuser(telegram_id)})')
     ids = '\n'.join(ref_list)
     try:
         await bot.send_message(message.chat.id, f'{ids}', reply_markup=worker_keyboard)
