@@ -6,7 +6,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 
 
 
-token = ''
+token = '1668667352:AAFrZwLvR7j7ma-pKdFVPLpIH-D4Az27EcU'
 
 start_message = """
 👋Добро пожаловать, {}
